@@ -2,10 +2,118 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Colton's MyViz Test!</title>
+    <title>MyViz Page</title>
+    <!-- Internal CSS for basic styling -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #2E8B57;
+        }
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .highlight {
+            background-color: #FFFFE0;
+            padding: 5px;
+        }
+        #special-text {
+            color: #FF6347;
+            font-weight: bold;
+        }
+        ul {
+            list-style-type: square;
+        }
+        a {
+            color: #1E90FF;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        table {
+            width: 50%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #B0C4DE;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        /* Responsive design for smaller screens */
+        @media (max-width: 600px) {
+            table {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-myviz test woooooo
+
+    <h1>Welcome to MyViz</h1>
+    <p>This is a sample page to demonstrate basic <strong>HTML</strong> and <em>CSS</em> styling.</p>
+
+    <h2>Text Styling</h2>
+    <p class="highlight">This paragraph has a highlighted background using a CSS class.</p>
+    <p id="special-text">This text is styled using an ID selector.</p>
+
+    <h2>Lists</h2>
+    <h3>Unordered List</h3>
+    <ul>
+        <li>First item</li>
+        <li>Second item</li>
+        <li>Third item</li>
+    </ul>
+
+    <h3>Ordered List</h3>
+    <ol>
+        <li>Step one</li>
+        <li>Step two</li>
+        <li>Step three</li>
+    </ol>
+
+    <h2>Links</h2>
+    <p>Visit the <a href="https://www.example.com" target="_blank">Example Website</a> for more information.</p>
+
+    <h2>Images</h2>
+    <img src="https://via.placeholder.com/400x200" alt="Sample Image">
+
+    <h2>Tables</h2>
+    <table>
+        <tr>
+            <th>Header 1</th>
+            <th>Header 2</th>
+        </tr>
+        <tr>
+            <td>Row 1, Cell 1</td>
+            <td>Row 1, Cell 2</td>
+        </tr>
+        <tr>
+            <td>Row 2, Cell 1</td>
+            <td>Row 2, Cell 2</td>
+        </tr>
+    </table>
+
+    <h2>Form</h2>
+    <form action="#" method="post">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" placeholder="Enter your name"><br><br>
+
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" placeholder="Enter your email"><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
 
 </body>
 </html>
