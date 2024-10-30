@@ -2,118 +2,134 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>MyViz Page</title>
-    <!-- Internal CSS for basic styling -->
+    <title>D3.js Bar Chart with Spending Totals</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
         }
-        h1 {
-            color: #2E8B57;
+        .bar {
+            fill: steelblue;
         }
-        p {
-            font-size: 16px;
-            line-height: 1.6;
+        .bar:hover {
+            fill: orange;
         }
-        .highlight {
-            background-color: #FFFFE0;
-            padding: 5px;
+        .axis text {
+            font-size: 12px;
         }
-        #special-text {
-            color: #FF6347;
-            font-weight: bold;
+        .axis path,
+        .axis line {
+            stroke: #000;
         }
-        ul {
-            list-style-type: square;
-        }
-        a {
-            color: #1E90FF;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-        }
-        table {
-            width: 50%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        table, th, td {
-            border: 1px solid #B0C4DE;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
-        /* Responsive design for smaller screens */
-        @media (max-width: 600px) {
-            table {
-                width: 100%;
-            }
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            padding: 6px;
+            font-size: 12px;
+            background: lightsteelblue;
+            border: 0px;
+            border-radius: 4px;
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
 
-    <h1>Welcome to MyViz</h1>
-    <p>This is a sample page to demonstrate basic <strong>HTML</strong> and <em>CSS</em> styling.</p>
+<h1>Yearly Total Spending Bar Chart</h1>
 
-    <h2>Text Styling</h2>
-    <p class="highlight">This paragraph has a highlighted background using a CSS class.</p>
-    <p id="special-text">This text is styled using an ID selector.</p>
+<div id="chart"></div>
 
-    <h2>Lists</h2>
-    <h3>Unordered List</h3>
-    <ul>
-        <li>First item</li>
-        <li>Second item</li>
-        <li>Third item</li>
-    </ul>
+<script>
+    // ********** Dataset **********
+    // Data from the CSV file (converted to JavaScript array format)
+    const dataset = [
+        { year: 2005, total: 3.3 },
+        { year: 2006, total: 5.0 },
+        { year: 2007, total: 5.1 },
+        { year: 2008, total: 5.8 },
+        { year: 2009, total: 4.7 }
+    ];
 
-    <h3>Ordered List</h3>
-    <ol>
-        <li>Step one</li>
-        <li>Step two</li>
-        <li>Step three</li>
-    </ol>
+    // ********** Set Up SVG Canvas Dimensions **********
+    const margin = { top: 30, right: 30, bottom: 40, left: 50 };
+    const width = 600 - margin.left - margin.right;
+    const height = 400 - margin.top - margin.bottom;
 
-    <h2>Links</h2>
-    <p>Visit the <a href="https://www.google.com" target="_blank">Example Website</a> for more information.</p>
+    // ********** Create SVG Element **********
+    const svg = d3.select('#chart')
+        .append('svg')
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
+        .append('g')
+        .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
-    <h2>Images</h2>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/4/47/Hobbit_Holes.jpg" alt="Hobbit Holes" width="400" height="200">
+    // ********** Create Scales **********
+    // X Scale: Band scale for categorical data
+    const xScale = d3.scaleBand()
+        .domain(dataset.map(d => d.year))
+        .range([0, width])
+        .padding(0.1);
 
-    <h2>Tables</h2>
-    <table>
-        <tr>
-            <th>Header 1</th>
-            <th>Header 2</th>
-        </tr>
-        <tr>
-            <td>Row 1, Cell 1</td>
-            <td>Row 1, Cell 2</td>
-        </tr>
-        <tr>
-            <td>Row 2, Cell 1</td>
-            <td>Row 2, Cell 2</td>
-        </tr>
-    </table>
+    // Y Scale: Linear scale for numerical data
+    const yScale = d3.scaleLinear()
+        .domain([0, d3.max(dataset, d => d.total)])
+        .range([height, 0]);
 
-    <h2>Form</h2>
-    <form action="#" method="post">
-        <label for="name">Name:</label><br>
-        <input type="text" id="name" name="name" placeholder="Enter your name"><br><br>
+    // ********** Create Axes **********
+    const xAxis = d3.axisBottom(xScale).tickFormat(d3.format("d"));
+    const yAxis = d3.axisLeft(yScale);
 
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email" placeholder="Enter your email"><br><br>
+    svg.append('g')
+        .attr('class', 'x axis')
+        .attr('transform', `translate(0, ${height})`)
+        .call(xAxis);
 
-        <input type="submit" value="Submit">
-    </form>
+    svg.append('g')
+        .attr('class', 'y axis')
+        .call(yAxis);
+
+    // ********** Create Bars **********
+    svg.selectAll('.bar')
+        .data(dataset)
+        .enter()
+        .append('rect')
+        .attr('class', 'bar')
+        .attr('x', d => xScale(d.year))
+        .attr('y', d => yScale(d.total))
+        .attr('width', xScale.bandwidth())
+        .attr('height', d => height - yScale(d.total))
+        .on('mouseover', function(event, d) {
+            d3.select(this).style('fill', 'orange');
+            tooltip.style('opacity', 1)
+                .html(`Year: ${d.year}<br>Total Spending: $${d.total}B`)
+                .style('left', (event.pageX + 10) + 'px')
+                .style('top', (event.pageY - 28) + 'px');
+        })
+        .on('mouseout', function() {
+            d3.select(this).style('fill', 'steelblue');
+            tooltip.style('opacity', 0);
+        });
+
+    // ********** Tooltip Setup **********
+    const tooltip = d3.select('body').append('div')
+        .attr('class', 'tooltip')
+        .style('opacity', 0);
+
+    // ********** Axis Labels **********
+    svg.append('text')
+        .attr('x', width / 2)
+        .attr('y', height + margin.bottom - 5)
+        .attr('text-anchor', 'middle')
+        .text('Year');
+
+    svg.append('text')
+        .attr('transform', 'rotate(-90)')
+        .attr('x', -height / 2)
+        .attr('y', -margin.left + 15)
+        .attr('text-anchor', 'middle')
+        .text('Total Spending (in billions)');
+
+</script>
 
 </body>
 </html>
