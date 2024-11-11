@@ -22,7 +22,7 @@
 
     <script>
         // Load the CSV file
-        d3.csv("path/to/your/data.csv").then(function(data) {
+        d3.csv("russia_losses_equipment.csv").then(function(data) {
             // Remove empty columns
             const equipmentTypes = Object.keys(data[0]).filter(key => key !== 'date' && data.some(d => d[key] !== ""));
 
