@@ -124,13 +124,13 @@
                               .attr("transform", (d, i) => `translate(0,${i * 20})`);
 
             legend.append("rect")
-                  .attr("x", width + 20)
+                  .attr("x", width + 30)
                   .attr("width", 18)
                   .attr("height", 18)
                   .style("fill", d => colorScale(d));
 
             legend.append("text")
-                  .attr("x", width + 16)
+                  .attr("x", width + 26)
                   .attr("y", 9)
                   .attr("dy", ".35em")
                   .style("text-anchor", "end")
