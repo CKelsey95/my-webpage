@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebTrends Photo Gallery</title>
+    <style>
+        /* Basic styles for the page */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        /* Container for the gallery */
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2 columns layout */
+            gap: 20px;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Individual photo item styling */
+        .photo-item {
+            text-align: center;
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: auto;
+            max-height: 300px;
+            border-radius: 4px;
+        }
+
+        /* Caption styling */
+        .photo-caption {
+            font-size: 14px;
+            color: #555555;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1 style="text-align: center; margin-top: 20px;">Photo Gallery</h1>
+
+<div class="gallery-container">
+    <!-- Photo 1 -->
+    <div class="photo-item">
+        <img src="avg_sessiond_br_bydevicetype.png" alt="Average Session Duration and Bounce Rate by Device Type">
+        <div class="photo-caption"> This shows us the average Session Duration and Bounce Rate by Device Type </div>
+    </div>
+
+    <!-- Photo 2 -->
+    <div class="photo-item">
+        <img src="avg_sessiond_byPage.png" alt="Average Session Duration by page">
+        <div class="photo-caption">Gives us the average Session Duration by Page.</div>
+    </div>
+
+    <!-- Photo 3 -->
+    <div class="photo-item">
+        <img src="traffic_trends_by_country_overtime.png" alt="Monthly Traffic Trend by Country">
+        <div class="photo-caption">This shows the traffic Trends over time by country, average line for comparison to show busy/slow months.</div>
+    </div>
+</div>
+
+</body>
+</html>
