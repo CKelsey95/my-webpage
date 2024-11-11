@@ -73,7 +73,7 @@
                .append("text")
                .attr("fill", "black")
                .attr("transform", "rotate(-90)")
-               .attr("y", -40)
+               .attr("y", -50)
                .attr("x", -height / 2)
                .attr("dy", "0.75em")
                .attr("text-anchor", "middle")
@@ -124,13 +124,13 @@
                               .attr("transform", (d, i) => `translate(0,${i * 20})`);
 
             legend.append("rect")
-                  .attr("x", width - 20)
+                  .attr("x", width - 40)
                   .attr("width", 18)
                   .attr("height", 18)
                   .style("fill", d => colorScale(d));
 
             legend.append("text")
-                  .attr("x", width - 24)
+                  .attr("x", width - 44)
                   .attr("y", 9)
                   .attr("dy", ".35em")
                   .style("text-anchor", "end")
