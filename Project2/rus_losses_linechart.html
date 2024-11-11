@@ -11,7 +11,7 @@
 
     <script>
         // Load the CSV file
-        d3.csv("Project2/russia_losses_equipment.csv").then(function(data) {
+        d3.csv("russia_losses_equipment.csv.csv").then(function(data) {
             // Parse the data
             const equipmentTypes = Object.keys(data[0]).filter(key => key !== 'date');
             data.forEach(d => {
