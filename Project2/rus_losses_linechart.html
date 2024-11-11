@@ -5,15 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>D3.js Line Graph from CSV</title>
     <script src="https://d3js.org/d3.v6.min.js"></script>
+    <style>
+        .tooltip {
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 5px;
+            pointer-events: none;
+            font-size: 12px;
+        }
+    </style>
 </head>
 <body>
     <div id="chart"></div>
+    <div class="tooltip" style="opacity: 0;"></div>
 
     <script>
         // Load the CSV file
-        d3.csv("russia_losses_equipment.csv").then(function(data) {
+        d3.csv("path/to/your/data.csv").then(function(data) {
+            // Remove empty columns
+            const equipmentTypes = Object.keys(data[0]).filter(key => key !== 'date' && data.some(d => d[key] !== ""));
+
             // Parse the data
-            const equipmentTypes = Object.keys(data[0]).filter(key => key !== 'date');
             data.forEach(d => {
                 d.date = new Date(d.date); // assuming there is a 'date' column
                 equipmentTypes.forEach(type => {
@@ -71,18 +84,36 @@
                            .x(d => x(d.date))
                            .y((d, type) => y(d[type]));
 
+            // Define color scale for better differentiation
+            const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+
+            // Add a tooltip
+            const tooltip = d3.select(".tooltip");
+
             // Draw lines for each equipment type
-            equipmentTypes.forEach(type => {
+            equipmentTypes.forEach((type, index) => {
                 svg.append("path")
                    .datum(data)
                    .attr("fill", "none")
-                   .attr("stroke", () => `hsl(${Math.random() * 360}, 100%, 50%)`) // Random color for each line
+                   .attr("stroke", colorScale(type))
                    .attr("stroke-width", 1.5)
                    .attr("d", d3.line()
                                  .x(d => x(d.date))
                                  .y(d => y(d[type])))
-                   .append("title") // Add tooltips
-                   .text(`Equipment: ${type}`);
+                   .on("mouseover", function(event) {
+                       d3.select(this).attr("stroke-width", 3);
+                       tooltip.style("opacity", 1);
+                   })
+                   .on("mousemove", function(event, d) {
+                       const [xPos, yPos] = d3.pointer(event);
+                       tooltip.html(`Equipment: ${type}<br>Date: ${x.invert(xPos).toDateString()}<br>Value: ${y.invert(yPos).toFixed(2)}`)
+                              .style("left", (event.pageX + 10) + "px")
+                              .style("top", (event.pageY - 28) + "px");
+                   })
+                   .on("mouseout", function() {
+                       d3.select(this).attr("stroke-width", 1.5);
+                       tooltip.style("opacity", 0);
+                   });
             });
 
             // Add a legend (optional)
@@ -96,7 +127,7 @@
                   .attr("x", width - 20)
                   .attr("width", 18)
                   .attr("height", 18)
-                  .style("fill", (d, i) => `hsl(${i * 30}, 100%, 50%)`);
+                  .style("fill", d => colorScale(d));
 
             legend.append("text")
                   .attr("x", width - 24)
@@ -107,15 +138,6 @@
         }).catch(function(error) {
             console.error('Error loading the CSV file:', error);
         });
-
-        // Function for adding transitions (optional)
-        function addTransitions() {
-            svg.selectAll("path")
-               .transition()
-               .duration(2000)
-               .attr("stroke-width", 2)
-               .attr("opacity", 1);
-        }
     </script>
 </body>
 </html>
