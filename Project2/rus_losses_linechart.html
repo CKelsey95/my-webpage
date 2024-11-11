@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D3.js Line Graph from CSV</title>
+    <title>Project 2, Russian Equipment Losses in Ukraine Over Time.</title>
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <style>
         .tooltip {
@@ -23,18 +23,18 @@
     <script>
         // Load the CSV file
         d3.csv("russia_losses_equipment.csv").then(function(data) {
-            // Remove empty columns
-            const equipmentTypes = Object.keys(data[0]).filter(key => key !== 'date' && data.some(d => d[key] !== ""));
+            // Remove empty columns and "day" which just counted the amount of days since the start of the invasion.
+            const equipmentTypes = Object.keys(data[0]).filter(key => key !== 'date' && key !== 'day' && data.some(d => d[key] !== ""));
 
-            // Parse the data
+            // Parse date from Date Column
             data.forEach(d => {
-                d.date = new Date(d.date); // assuming there is a 'date' column
+                d.date = new Date(d.date);
                 equipmentTypes.forEach(type => {
-                    d[type] = +d[type]; // Convert each equipment column to a number
+                    d[type] = +d[type]; // creates numeric value from each equipment column entry
                 });
             });
 
-            // Set the dimensions and margins of the graph
+            // Set dimensions of graph and adds some small margins
             const margin = {top: 20, right: 30, bottom: 50, left: 50},
                   width = 960 - margin.left - margin.right,
                   height = 500 - margin.top - margin.bottom;
@@ -47,7 +47,7 @@
                           .append("g")
                           .attr("transform", `translate(${margin.left},${margin.top})`);
 
-            // Set up scales
+            // scales x to time and y as linear
             const x = d3.scaleTime()
                         .domain(d3.extent(data, d => d.date))
                         .range([0, width]);
@@ -77,20 +77,20 @@
                .attr("x", -height / 2)
                .attr("dy", "0.75em")
                .attr("text-anchor", "middle")
-               .text("Value");
+               .text("total losses");
 
-            // Define a line generator
+            // creates the line
             const line = d3.line()
                            .x(d => x(d.date))
                            .y((d, type) => y(d[type]));
 
-            // Define color scale for better differentiation
+            // adds a color scale as there are many different equipment types
             const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
-            // Add a tooltip
+            // adds the tooltip
             const tooltip = d3.select(".tooltip");
 
-            // Draw lines for each equipment type
+            // draws lines for each type of equipment added
             equipmentTypes.forEach((type, index) => {
                 svg.append("path")
                    .datum(data)
@@ -116,7 +116,7 @@
                    });
             });
 
-            // Add a legend (optional)
+            // adds the legend, very necessary for this many entries.
             const legend = svg.selectAll(".legend")
                               .data(equipmentTypes)
                               .enter()
