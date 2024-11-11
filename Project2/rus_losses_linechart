@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3.js Line Graph from CSV</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+</head>
+<body>
+    <div id="chart"></div>
+
+    <script>
+        // Load the CSV file
+        d3.csv("Project2/russia_losses_equipment.csv").then(function(data) {
+            // Parse the data
+            const equipmentTypes = Object.keys(data[0]).filter(key => key !== 'date');
+            data.forEach(d => {
+                d.date = new Date(d.date); // assuming there is a 'date' column
+                equipmentTypes.forEach(type => {
+                    d[type] = +d[type]; // Convert each equipment column to a number
+                });
+            });
+
+            // Set the dimensions and margins of the graph
+            const margin = {top: 20, right: 30, bottom: 50, left: 50},
+                  width = 960 - margin.left - margin.right,
+                  height = 500 - margin.top - margin.bottom;
+
+            // Append the SVG object to the body of the page
+            const svg = d3.select("#chart")
+                          .append("svg")
+                          .attr("width", width + margin.left + margin.right)
+                          .attr("height", height + margin.top + margin.bottom)
+                          .append("g")
+                          .attr("transform", `translate(${margin.left},${margin.top})`);
+
+            // Set up scales
+            const x = d3.scaleTime()
+                        .domain(d3.extent(data, d => d.date))
+                        .range([0, width]);
+
+            const y = d3.scaleLinear()
+                        .domain([0, d3.max(data, d => d3.max(equipmentTypes, type => d[type]))])
+                        .range([height, 0]);
+
+            // Add the X Axis
+            svg.append("g")
+               .attr("transform", `translate(0,${height})`)
+               .call(d3.axisBottom(x))
+               .append("text")
+               .attr("fill", "black")
+               .attr("x", width / 2)
+               .attr("y", 40)
+               .attr("text-anchor", "middle")
+               .text("Date");
+
+            // Add the Y Axis
+            svg.append("g")
+               .call(d3.axisLeft(y))
+               .append("text")
+               .attr("fill", "black")
+               .attr("transform", "rotate(-90)")
+               .attr("y", -40)
+               .attr("x", -height / 2)
+               .attr("dy", "0.75em")
+               .attr("text-anchor", "middle")
+               .text("Value");
+
+            // Define a line generator
+            const line = d3.line()
+                           .x(d => x(d.date))
+                           .y((d, type) => y(d[type]));
+
+            // Draw lines for each equipment type
+            equipmentTypes.forEach(type => {
+                svg.append("path")
+                   .datum(data)
+                   .attr("fill", "none")
+                   .attr("stroke", () => `hsl(${Math.random() * 360}, 100%, 50%)`) // Random color for each line
+                   .attr("stroke-width", 1.5)
+                   .attr("d", d3.line()
+                                 .x(d => x(d.date))
+                                 .y(d => y(d[type])))
+                   .append("title") // Add tooltips
+                   .text(`Equipment: ${type}`);
+            });
+
+            // Add a legend (optional)
+            const legend = svg.selectAll(".legend")
+                              .data(equipmentTypes)
+                              .enter()
+                              .append("g")
+                              .attr("transform", (d, i) => `translate(0,${i * 20})`);
+
+            legend.append("rect")
+                  .attr("x", width - 20)
+                  .attr("width", 18)
+                  .attr("height", 18)
+                  .style("fill", (d, i) => `hsl(${i * 30}, 100%, 50%)`);
+
+            legend.append("text")
+                  .attr("x", width - 24)
+                  .attr("y", 9)
+                  .attr("dy", ".35em")
+                  .style("text-anchor", "end")
+                  .text(d => d);
+        }).catch(function(error) {
+            console.error('Error loading the CSV file:', error);
+        });
+
+        // Function for adding transitions (optional)
+        function addTransitions() {
+            svg.selectAll("path")
+               .transition()
+               .duration(2000)
+               .attr("stroke-width", 2)
+               .attr("opacity", 1);
+        }
+    </script>
+</body>
+</html>
