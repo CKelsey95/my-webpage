@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebTrends Photo Gallery</title>
+    <style>
+        /* Basic styles for the page */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        /* Container for the gallery */
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2 columns layout */
+            gap: 20px;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Individual photo item styling */
+        .photo-item {
+            text-align: center;
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: auto;
+            max-height: 300px;
+            border-radius: 4px;
+        }
+
+        /* Caption styling */
+        .photo-caption {
+            font-size: 14px;
+            color: #555555;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1 style="text-align: center; margin-top: 20px;">Photo Gallery</h1>
+
+<div class="gallery-container">
+    <!-- Photo 1 -->
+    <div class="photo-item">
+        <img src="Lab 4.1/Sales Distriburation Across States.png" alt="Sales Distriburation Across States">
+        <div class="photo-caption">The highest three states on Sales are California, New York, and Texas which correlates to the population of those three states. One thing I did notice with further analysis is that Texas has a negative profit however, this may be due to increased shipping costs to deliver products over a very large area.</div>
+    </div>
+
+    <!-- Photo 2 -->
+    <div class="photo-item">
+        <img src="Lab 4.1/Category Sales Comparison.png" alt="Category Sales Comparison">
+        <div class="photo-caption">Technology has the highest amount of Sales with Office Supplies being the last. Overall however, the three categories are pretty close together, indicating that none of the categories are the main focus of the company (or at least shouldn’t be)</div>
+    </div>
+
+    <!-- Photo 3 -->
+    <div class="photo-item">
+        <img src="Lab 4.1/Monthly Sales Trend.png" alt="Monthly Sales Trend">
+        <div class="photo-caption">There are peaks in March, September, and November with large dips in February and October. This could be for a variety of reasons but when I see theSeptember to October dropoff, my thought is that many companies start their Fiscal year in October so they may be spending their surplus in September and “maintaining” in October.</div>
+    </div>
+
+    <!-- Photo 4 -->
+    <div class="photo-item">
+        <img src="Lab 4.1/Profit vs. Sales Analysis.png" alt="Profit vs. Sales Analysis">
+        <div class="photo-caption">Tables are not doing well! They have over 200k in sales and are -17k in profit. Alternatively, copiers are at 150k in sales and 50k in profit, a very high profit margin for such a large and hard to ship item.I believe this may be because tables are relatively cheap despite being very heavy/large which increases shipping costs, copiers are also heavy/large but much more expensive.The relative percentage of shipping cost to price is much lower for copiers, allowing the company to keep more profit on each sale.</div>
+    </div>
+
+        <!-- Photo 5 -->
+    <div class="photo-item">
+        <img src="Lab 4.1/Sales by Shipping Mode.png" alt="Sales by Shipping Mode">
+        <div class="photo-caption">Standard Class is chosen the most in sales by far. This is most likely caused by the reduced cost from First Class and Same Day, most companies do not order new items when it is an emergency and will not need their items to be delivered as soon as possible. .</div>
+    </div>
+</div>
+
+</body>
+</html>
